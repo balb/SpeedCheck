@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
 using SpeedCheckMvc.Models;
 
@@ -15,7 +16,15 @@ namespace SpeedCheckMvc.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var sw = Stopwatch.StartNew();
+            var mySHA256 = SHA256.Create();
+            for (var i = 0; i < 1000000; i++)
+            {
+                var result = mySHA256.ComputeHash(Guid.NewGuid().ToByteArray());
+            }
+
+            sw.Stop();
+            return View(new { sw.ElapsedMilliseconds });
         }
 
         public IActionResult Privacy()
